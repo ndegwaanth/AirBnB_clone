@@ -1,21 +1,28 @@
+#!/usr/bin/env python3
+"""this is the python script"""
+
 import uuid
 import datetime
+from models import storage
+from models.engine.file_storage import FileStorage
 
 
 class BaseModel:
     """define all the common attribute/methods for other classes"""
-    def __init__(self):
-        """
-            id (str):
-                    this id is string in nature
-            created_at (int):
-                    this created_at attribut a datetime
-            updated_at (int):
-                    this also a datetime
-        """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = self.created_at
+    def __init__(self, *args, **kwargs):
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == '__class__':
+                    continue
+                elif key in ['created_at', 'updated_at']:
+                    setattr(self, datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
+                else:
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = self.created_at
+            storage.new()
 
     def __str__(self):
         """this method print the class name, id and all method in it"""
@@ -24,6 +31,7 @@ class BaseModel:
     def save(self):
         """update update_at with current datetime"""
         self.updated_at = datetime.datetime.now()
+        storage.save()
 
     def to_dict(self):
         """return a dictionary containing all the keys"""
