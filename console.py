@@ -5,12 +5,27 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 
 
 class HBNBCommand(cmd.Cmd):
     """contain the entry of the command prompt"""
     dictionary = {"BaseModel": BaseModel}
+    dictionary["Aminity"] = State
+    dictionary["City"] = City
+    dictionary["Place"] = Place
+    dictionary["Review"] = Review
+    dictionary["State"] = State
     class_names = ['BaseModel', 'User']
+    class_names.append('Amenity')
+    class_names.append('City')
+    class_names.append('Place')
+    class_names.append('Review')
+    class_names.append('state')
     prompt = "(hbnb)"
 
     def do_quit(self, arg):
