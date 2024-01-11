@@ -4,12 +4,13 @@
 import cmd
 from models.base_model import BaseModel
 from models import storage
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """contain the entry of the command prompt"""
     dictionary = {"BaseModel": BaseModel}
-    class_names = ['BaseModel']
+    class_names = ['BaseModel', 'User']
     prompt = "(hbnb)"
 
     def do_quit(self, arg):
