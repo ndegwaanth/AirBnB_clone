@@ -40,7 +40,9 @@ class HBNBCommand(cmd.Cmd):
         else:
             info_class = self.dictionary[arg]
             empty = info_class()
-            empty.save()
+            storage.new(empty)
+            storage.save()
+            #empty.save()
             print(empty.id)
 
     def do_show(self, arg):
@@ -58,6 +60,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             info_class = self.dictionary[args[0]]
             id_instance = args[1]
+            #key = "{}.{}".format(info_class, id_instance)
             instances = storage.all()
             key = args[0] + "." + id_instance
 
@@ -99,20 +102,13 @@ class HBNBCommand(cmd.Cmd):
         instances = storage.all()
 
         if not args:
-            result = []
-            for new_instance in instances.values():
-                result.append(str(new_instance))
-                print(result)
+            result = [str(new_instance) for new_instance in instances.values()]
+            print(result)
         elif args[0] not in self.class_names:
             print("** class doesn't exist **")
         else:
             class_name = args[0]
-            filtered_instance = []
-
-            for key, new_instance in instances.items():
-                if key.startswith(class_name + "."):
-                    filtered_instance.append(str(new_instance))
-
+            filtered_instance = [str(new_instance) for key, new_instance in instances.items() if key.startswith(class_name + ".")]
             if filtered_instance:
                 print(filtered_instance)
             else:

@@ -25,16 +25,16 @@ class FileStorage:
             object_serialization[key] = value.to_dict()
 
         with open(self.__file_path, 'w') as file_content:
-            json.dumps(object_serialization, file_content)
+            json.dump(object_serialization, file_content)
 
     def reload(self):
         """deserialize the json file to __objects"""
         try:
             with open(self.__file_path, 'r') as file_content:
-                file = json.loads(file_content)
+                file = json.load(file_content)
                 for key, value in file.items():
                     name_of_class, obj_id = key.split('.')
-                    obj = globals()[name_of_class(**value)]
+                    obj = globals()[name_of_class](**value)
                     self.__objects[key] = obj
         except FileNotFoundError:
             pass

@@ -13,8 +13,8 @@ class BaseModel:
         if kwargs:
             for key, value in kwargs.items():
                 if key == '__class__':
-                    continue
-                elif key in ['created_at', 'updated_at']:
+                    pass
+                if key in ['created_at', 'updated_at']:
                     setattr(self, datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
                 else:
                     setattr(self, key, value)
@@ -22,7 +22,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = self.created_at
-            storage.new()
+            storage.new(self)
 
     def __str__(self):
         """this method print the class name, id and all method in it"""
@@ -40,10 +40,3 @@ class BaseModel:
         dict_obj['created_at'] = self.created_at.isoformat()
         dict_obj['updated_at'] = self.updated_at.isoformat()
         return dict_obj
-
-
-mybasemodelclass = BaseModel()
-print(mybasemodelclass)
-mybasemodelclass.save()
-convert_basemode_dict = mybasemodelclass.to_dict()
-print(convert_basemode_dict)
