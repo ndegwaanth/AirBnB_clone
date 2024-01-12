@@ -2,6 +2,7 @@
 """console"""
 
 import cmd
+import re
 from models.base_model import BaseModel
 from models import storage
 from models.user import User
@@ -58,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
             empty = info_class()
             storage.new(empty)
             storage.save()
-            #empty.save()
+            # empty.save()
             print(empty.id)
 
     def do_show(self, arg):
@@ -76,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             info_class = self.dictionary[args[0]]
             id_instance = args[1]
-            #key = "{}.{}".format(info_class, id_instance)
+            # key = "{}.{}".format(info_class, id_instance)
             instances = storage.all()
             key = args[0] + "." + id_instance
 
@@ -111,24 +112,25 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_all(self, arg):
-        """print all the string representation of all instances based
-           or not on the class name
+        """Prints all string representation of all instances
+            based or not on the class name. Ex: $ all BaseModel or $ all
         """
-        args = arg.split()
-        instances = storage.all()
-
-        if not args:
-            result = [str(new_instance) for new_instance in instances.values()]
-            print(result)
-        elif args[0] not in self.class_names:
+        if arg and arg not in self.class_names:
             print("** class doesn't exist **")
         else:
-            class_name = args[0]
-            filtered_instance = [str(new_instance) for key, new_instance in instances.items() if key.startswith(class_name + ".")]
-            if filtered_instance:
-                print(filtered_instance)
-            else:
-                print("[]")
+            dictionary_object = storage.all()
+            dfile = {}
+            if arg:
+                for key, value in dictionary_object.items():
+                    if key.startswith(arg):
+                        dfile[key] = value
+                    else:
+                        dfile = dictionary_object
+                        list = [value.__str__() for value in dfile.values()]
+                        if list:
+                            print(list)
+                        else:
+                            print("[]")
 
     def do_update(self, arg):
         """updates an instance basd on the class name and id by
@@ -142,7 +144,7 @@ class HBNBCommand(cmd.Cmd):
         elif args[0] not in self.class_names:
             print("** class doesn't exist **")
         elif len(args) < 2:
-            print("** instance id missing **i")
+            print("** instance id missing **")
         elif len(args) < 3:
             print("** attribute name missing **")
         elif len(args) < 4:
@@ -170,6 +172,29 @@ class HBNBCommand(cmd.Cmd):
                         storage.save()
                 else:
                     print("** attribute name missing ** ")
+    def default(self, arg):
+        """Default behavior for cmd module when input is invalid"""
+        valid_commands = ["all", "show", "destroy", "count", "update"]
+        match = re.match(r"^(\w+)\s*\((.*)\)$", arg)
+
+        if match:
+            command, parameters = match.groups()
+            if command in valid_commands:
+                call = "{} {}".format(command, parameters)
+                return getattr(self, "do_" + command)(call)
+
+        print("*** Unknown syntax: {}".format(arg))
+        return False
+    
+    def do_count(self, arg):
+        """Retrive the number of instances of a given class"""
+        args = arg.split()
+        iterate = 0
+
+        for count in storage.all().values():
+            if args[0] == count.__class__.__name__:
+                iterate = iterate + 1
+        print(iterate)
 
 
 if __name__ == '__main__':

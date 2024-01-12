@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """this is a python script"""
 
+import os
 import json
 
 
@@ -29,19 +30,20 @@ class FileStorage:
 
     def reload(self):
         """deserialize the json file to __objects"""
+        from models.amenity import Amenity
+        from models.city import City
+        from models.place import Place
+        from models.review import Review
+        from models.state import State
+        from models.base_model import BaseModel
         try:
-            with open(self.__file_path, 'r') as file_content:
-                file = json.load(file_content)
-                for key, value in file.items():
-                    name_of_class, obj_id = key.split('.')
-                    
-                    if name_of_class == "User":
-                        from models.user import User
-                        obj = User(**value)
-                    else:
-                        from models.base_model import BaseModel
-                        obj = BaseModel(**value)
-                        #obj = globals()[name_of_class](**value)
-                    self.__objects[key] = obj
+            if os.path.isfile(self.__file_path):
+                with open(self.__file_path, 'r', encoding='utf-8') as f:
+                    temp = json.load(f)
+                    for key, value in temp.items():
+                        spec_class = value.get("__class__", "BaseModel")
+                        cls_type = self.__objects.get(spec_class, BaseModel)
+                        obj = cls_type(**value)
+                        self.__objects[key] = obj
         except FileNotFoundError:
             pass
