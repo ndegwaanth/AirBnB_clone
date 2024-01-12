@@ -16,7 +16,7 @@ from models.state import State
 class HBNBCommand(cmd.Cmd):
     """contain the entry of the command prompt"""
     dictionary = {"BaseModel": BaseModel}
-    dictionary["Aminity"] = State
+    dictionary["Amenity"] = State
     dictionary["City"] = City
     dictionary["Place"] = Place
     dictionary["Review"] = Review
@@ -36,7 +36,7 @@ class HBNBCommand(cmd.Cmd):
     def help(self, arg):
         """show the help information"""
         if arg:
-            print("EOF {super().help(arg)}")
+            print(f"EOF {super().help(arg)}")
         else:
             for cmd_tag in dir(self.__class__):
                 if cmd_tag.startswith("help"):
@@ -124,13 +124,14 @@ class HBNBCommand(cmd.Cmd):
                 for key, value in dictionary_object.items():
                     if key.startswith(arg):
                         dfile[key] = value
-                    else:
-                        dfile = dictionary_object
-                        list = [value.__str__() for value in dfile.values()]
-                        if list:
-                            print(list)
-                        else:
-                            print("[]")
+            else:
+                dfile = dictionary_object
+                        
+            list = [value.__str__() for value in dfile.values()]
+            if list:
+                    print(list)
+            else:
+                print("[]")
 
     def do_update(self, arg):
         """updates an instance basd on the class name and id by
