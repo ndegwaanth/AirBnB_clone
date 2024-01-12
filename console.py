@@ -188,8 +188,13 @@ class HBNBCommand(cmd.Cmd):
                 return getattr(self, "do_" + command)(call)
         
         match_all = re.match(r"^(\w+)\.all\(\)$", arg)
+        match_count = re.match(r"^(\w+)\.count\(\)$", arg)
+        
         if match_all:
             class_name = match_all.group(1)
+            return getattr(self, "do_count")(class_name)
+        elif match_count:
+            class_name = match_count.group(1)
             return getattr(self, "do_all")(class_name)
 
         print("*** Unknown syntax: {}".format(arg))
@@ -204,11 +209,19 @@ class HBNBCommand(cmd.Cmd):
         elif args[0] not in self.class_names:
             print("** class doesn't exist **")
         else:
-            iterate = 0
-            for count in storage.all().values():
-                if args[0] == count.__class__.__name__:
-                    iterate = iterate + 1
-            print(iterate)
+            dictionary_object = storage.all()
+            dfile = {}
+            if arg:
+                for key, value in dictionary_object.items():
+                    if key.startswith(arg):
+                        dfile[key] = value
+                    else:
+                        dfile = dictionary_object
+                        list = [value.__str__() for value in dfile.values()]
+                        if list:
+                            print(list)
+                        else:
+                            print("[]")
 
 
 if __name__ == '__main__':
