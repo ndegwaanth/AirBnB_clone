@@ -186,6 +186,11 @@ class HBNBCommand(cmd.Cmd):
                     return self.do_count(parameters)
                 call = "{} {}".format(command, parameters)
                 return getattr(self, "do_" + command)(call)
+        
+        match_all = re.match(r"^(\w+)\.all\(\)$", arg)
+        if match_all:
+            class_name = match_all.group(1)
+            return getattr(self, "do_all")(class_name)
 
         print("*** Unknown syntax: {}".format(arg))
         return False
