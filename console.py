@@ -172,6 +172,7 @@ class HBNBCommand(cmd.Cmd):
                         storage.save()
                 else:
                     print("** attribute name missing ** ")
+
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""
         valid_commands = ["all", "show", "destroy", "count", "update"]
@@ -180,21 +181,28 @@ class HBNBCommand(cmd.Cmd):
         if match:
             command, parameters = match.groups()
             if command in valid_commands:
+                if command == "count":
+                    return self.do_count(parameters)
                 call = "{} {}".format(command, parameters)
                 return getattr(self, "do_" + command)(call)
 
         print("*** Unknown syntax: {}".format(arg))
         return False
-    
+
     def do_count(self, arg):
         """Retrive the number of instances of a given class"""
         args = arg.split()
-        iterate = 0
 
-        for count in storage.all().values():
-            if args[0] == count.__class__.__name__:
-                iterate = iterate + 1
-        print(iterate)
+        if not arg:
+            print("** class name missing **")
+        elif args[0] not in self.class_names:
+            print("** class doesn't exist **")
+        else:
+            iterate = 0
+            for count in storage.all().values():
+                if args[0] == count.__class__.__name__:
+                    iterate = iterate + 1
+            print(iterate)
 
 
 if __name__ == '__main__':
