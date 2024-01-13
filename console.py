@@ -15,7 +15,7 @@ from models.state import State
 
 class HBNBCommand(cmd.Cmd):
     """contain the entry of the command prompt"""
-    dictionary = {"BaseModel": BaseModel}
+    dictionary = {"BaseModel": BaseModel, "User": User}
     dictionary["Amenity"] = State
     dictionary["City"] = City
     dictionary["Place"] = Place
@@ -185,16 +185,20 @@ class HBNBCommand(cmd.Cmd):
         
         match_all = re.match(r"^(\w+)\.all\(\)$", arg)
         match_count = re.match(r"^(\w+)\.count\(\)$", arg)
-        
+        match_destroy = re.match(r"^(\w+)\.destroy\((.*?)\)$", arg)
+
         if match_all:
             class_name = match_all.group(1)
             return getattr(self, "do_all")(class_name)
         elif match_count:
             class_name = match_count.group(1)
             return getattr(self, "do_count")(class_name)
-
-        print("*** Unknown syntax: {}".format(arg))
-        return False
+        elif match_destroy:
+            class_name = match_destroy.group(1)
+            instance_id = match_destroy.group(2)
+            return self.do_destroy("{} {}".format(class_name, instance_id))
+        else:
+            print("*** Unknown syntax: {}".format(arg))
 
     def do_all(self, arg):
         """Retrive the number of instances of a given class"""
