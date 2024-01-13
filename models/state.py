@@ -11,3 +11,10 @@ class State(BaseModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def do_dict(self):
+        """return a dictionary representation of State"""
+        state_dict = super().to_dict()
+        state_dict['name'] = self.name
+
+        return state_dict

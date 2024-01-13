@@ -11,3 +11,10 @@ class Amenity(BaseModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def to_dict(self):
+        """return a dictionary representation of Amenity"""
+        amenity_dict = super().to_dict()
+        amenity_dict['name'] = self.name
+
+        return amenity_dict

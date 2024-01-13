@@ -82,7 +82,7 @@ class HBNBCommand(cmd.Cmd):
             key = args[0] + "." + id_instance
 
             # print(f"Key: {key}")
-            # print(f"Instances: {instances}")
+            print(f"[User]: {instances}")
 
             if key in instances:
                 instance_data = instances[key].to_dict()
@@ -157,32 +157,18 @@ class HBNBCommand(cmd.Cmd):
             value = args[3].strip()
 
             instances = storage.all()
-            key = "{}.{}".format(class_name, id_instance)
-            # key = class_name + "." + id_instance
+            # key = "{}.{}".format(class_name, id_instance)
+            key = class_name + "." + id_instance
             """debug
             print("Key: ", key)"""
 
             if key not in instances:
-                print("** no instance found **")
+                do_default(key)
+                # print("** no instance found **")
             else:
                 new_instance = instances[key]
-
-                try:
-                    update_dict = eval(dict_representation)
-                except Exception as e:
-                    print(f"Error converting dictionary representation: {e}")
-                    return
-
-                if isinstance(update_dict, dict):
-                    for key, value in update_dict.items():
-                        if key not in ['id', 'created_at', 'updated_at']:
-                            val_type = type(getattr(new_instance, key))
-                            setattr(new_instance, key, val_type(value))
-                    storage.save()
-                else:
-                    print("** attribute name missing **")
-                    """debug
-                print("Instances: ", new_instance)
+                # debug
+                # print("Instances: ", new_instance)
 
                 if hasattr(new_instance, attribute_name):
                     mylist = ['id', 'created_at', 'updated_at']
@@ -190,8 +176,10 @@ class HBNBCommand(cmd.Cmd):
                         val_type = type(getattr(new_instance, attribute_name))
                         setattr(new_instance, attribute_name, val_type(value))
                         storage.save()
+                    else:
+                        print("** cannot update id, created_at, or updated_at **")
                 else:
-                    print("** attribute name missing ** ")"""
+                    print("** attribute name missing ** ")
 
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""

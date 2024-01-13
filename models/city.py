@@ -12,3 +12,11 @@ class City(BaseModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def to_dict(self):
+        """return a dictionary representation of City"""
+        city_dict = super().to_dict()
+        city_dict['state_id'] = self.state_id
+        city_dict['name'] = self.name
+
+        return city_dict

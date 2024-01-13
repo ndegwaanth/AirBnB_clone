@@ -18,7 +18,7 @@ class User(BaseModel):
         self.first_name = first_name
         self.last_name = last_name
 
-    def to_dict(self):
+    def do_dict(self):
         """return a dictionary representation of user"""
         user_dict = super().to_dict()
         user_dict['email'] = self.email
