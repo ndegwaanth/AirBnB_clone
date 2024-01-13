@@ -111,27 +111,21 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def do_all(self, arg):
-        """Prints all string representation of all instances
-            based or not on the class name. Ex: $ all BaseModel or $ all
-        """
-        if arg and arg not in self.class_names:
+    def do_count(self, arg):
+        """Retrieve the number of instances of a given class"""
+        args = arg.split('.')
+
+        if not arg:
+            print("** class name missing **")
+        elif args[0] not in self.class_names:
             print("** class doesn't exist **")
         else:
             dictionary_object = storage.all()
-            dfile = {}
-            if arg:
-                for key, value in dictionary_object.items():
-                    if key.startswith(arg):
-                        dfile[key] = value
-            else:
-                dfile = dictionary_object
-                        
-            list = [value.__str__() for value in dfile.values()]
-            if list:
-                    print(list)
-            else:
-                print("[]")
+            count = 0
+            for key in dictionary_object.keys():
+                if key.startswith(args[0] + "."):
+                    count += 1
+            print(count)
 
     def do_update(self, arg):
         """updates an instance basd on the class name and id by
@@ -178,6 +172,8 @@ class HBNBCommand(cmd.Cmd):
         """Default behavior for cmd module when input is invalid"""
         valid_commands = ["all", "show", "destroy", "count", "update"]
         match = re.match(r"^(\w+)\s*\((.*)\)$", arg)
+        args = arg.split('.')
+        my_class = args[0]
 
         if match:
             command, parameters = match.groups()
@@ -192,15 +188,15 @@ class HBNBCommand(cmd.Cmd):
         
         if match_all:
             class_name = match_all.group(1)
-            return getattr(self, "do_count")(class_name)
+            return getattr(self, "do_all")(class_name)
         elif match_count:
             class_name = match_count.group(1)
-            return getattr(self, "do_all")(class_name)
+            return getattr(self, "do_count")(class_name)
 
         print("*** Unknown syntax: {}".format(arg))
         return False
 
-    def do_count(self, arg):
+    def do_all(self, arg):
         """Retrive the number of instances of a given class"""
         args = arg.split()
 
