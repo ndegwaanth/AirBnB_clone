@@ -26,7 +26,13 @@ class BaseModel:
 
     def __str__(self):
         """this method print the class name, id and all method in it"""
-        return f"[{self.__class__.__name__}]({self.id}){self.__dict__}"
+        # return f"[{self.__class__.__name__}]({self.id}){self.__dict__}"
+        class_name = self.__class__.__name__
+        return "[{}] ({}) {}".format(
+                class_name,
+                self.id,
+                {key: getattr(self, key) for key in self.__dict__.keys() if key != '__class__'}
+        )
 
     def save(self):
         """update update_at with current datetime"""
