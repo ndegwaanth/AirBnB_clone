@@ -81,8 +81,13 @@ class HBNBCommand(cmd.Cmd):
             instances = storage.all()
             key = args[0] + "." + id_instance
 
+            # print(f"Key: {key}")
+            # print(f"Instances: {instances}")
+
             if key in instances:
-                new_instance = instances[key]
+                instance_data = instances[key].to_dict()
+                new_instance = info_class(**instance_data)
+
                 print(new_instance)
             else:
                 print("** no instance found **")
@@ -263,4 +268,5 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
+
     HBNBCommand().cmdloop()
