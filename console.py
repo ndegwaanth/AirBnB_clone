@@ -146,18 +146,38 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
 
         else:
-            class_name = args[0]
-            id_instance = args[1]
-            attribute_name = args[2]
-            value = args[3]
+            class_name = args[0].strip()
+            id_instance = args[1].strip()
+            attribute_name = args[2].strip()
+            value = args[3].strip()
 
             instances = storage.all()
-            key = class_name + "." + id_instance
+            key = "{}.{}".format(class_name, id_instance)
+            # key = class_name + "." + id_instance
+            """debug
+            print("Key: ", key)"""
 
             if key not in instances:
                 print("** no instance found **")
             else:
                 new_instance = instances[key]
+
+                try:
+                    update_dict = eval(dict_representation)
+                except Exception as e:
+                    print(f"Error converting dictionary representation: {e}")
+                    return
+
+                if isinstance(update_dict, dict):
+                    for key, value in update_dict.items():
+                        if key not in ['id', 'created_at', 'updated_at']:
+                            val_type = type(getattr(new_instance, key))
+                            setattr(new_instance, key, val_type(value))
+                    storage.save()
+                else:
+                    print("** attribute name missing **")
+                    """debug
+                print("Instances: ", new_instance)
 
                 if hasattr(new_instance, attribute_name):
                     mylist = ['id', 'created_at', 'updated_at']
@@ -166,7 +186,7 @@ class HBNBCommand(cmd.Cmd):
                         setattr(new_instance, attribute_name, val_type(value))
                         storage.save()
                 else:
-                    print("** attribute name missing ** ")
+                    print("** attribute name missing ** ")"""
 
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""
@@ -180,12 +200,20 @@ class HBNBCommand(cmd.Cmd):
             if command in valid_commands:
                 if command == "count":
                     return self.do_count(parameters)
+                elif command == "show":
+                    return self.do_show(parameters)
+                elif command == "destroy":
+                    return self.do_destroy(parameters)
+                elif command == "update":
+                    return self.do_update(parameters)
                 call = "{} {}".format(command, parameters)
                 return getattr(self, "do_" + command)(call)
-        
+
         match_all = re.match(r"^(\w+)\.all\(\)$", arg)
         match_count = re.match(r"^(\w+)\.count\(\)$", arg)
         match_destroy = re.match(r"^(\w+)\.destroy\((.*?)\)$", arg)
+        match_show = re.match(r"^(\w+)\.show\((.*)\)$", arg)
+        match_update = re.match(r"^(\w+)\.update\((.*?)\)$", arg)
 
         if match_all:
             class_name = match_all.group(1)
@@ -197,6 +225,16 @@ class HBNBCommand(cmd.Cmd):
             class_name = match_destroy.group(1)
             instance_id = match_destroy.group(2)
             return self.do_destroy("{} {}".format(class_name, instance_id))
+        elif match_show:
+            class_name, id_instance = match_show.groups(1)
+            instance_id = match_show.group(2)
+            # parameters = "{} {}".format(class_name, id_instance)
+            # return self.do_show(parameters)
+            return self.do_show("{} {}".format(class_name, instance_id))
+        elif match_update:
+            class_name = match_update.group(1)
+            update_params = match_update.group(2)
+            return self.do_update("{} {}".format(class_name, update_params))
         else:
             print("*** Unknown syntax: {}".format(arg))
 

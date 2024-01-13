@@ -20,12 +20,12 @@ class User(BaseModel):
 
     def to_dict(self):
         """return a dictionary representation of user"""
-        uset_dict = super().to_dict()
-        uset_dict['email'] = self.email
-        uset_dict['password'] = self.password
-        uset_dict['first_name'] = self.first_name
-        uset_dict['last_name'] = self.last_name
-        return uset_dict
+        user_dict = super().to_dict()
+        user_dict['email'] = self.email
+        user_dict['password'] = self.password
+        user_dict['first_name'] = self.first_name
+        user_dict['last_name'] = self.last_name
+        return user_dict
 
     def __str__(self):
         """return a string representation of User"""
