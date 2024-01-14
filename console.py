@@ -82,7 +82,7 @@ class HBNBCommand(cmd.Cmd):
             key = args[0] + "." + id_instance
 
             # print(f"Key: {key}")
-            print(f"[User]: {instances}")
+            # print(f"[User]: {instances}")
 
             if key in instances:
                 instance_data = instances[key].to_dict()
