@@ -2,6 +2,10 @@
 """this is the amenity test"""
 
 import unittest
+import sys
+
+sys.path.append('/AirBnB_clone/models/amenity')
+
 from models.amenity import Amenity
 
 
@@ -33,6 +37,7 @@ class TestAmenity(unittest.TestCase):
         self.assertEqual(amenity_dict['__class__'], 'Amenity')
         self.assertEqual(amenity_dict['name'], amenity.name)
 
+    @classmethod
     def test_from_dict(self):
         """ Test if an instance of Amenity can be created from a dictionary """
         amenity_data = {
