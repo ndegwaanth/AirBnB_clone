@@ -49,5 +49,6 @@ class TestAmenity(unittest.TestCase):
         self.assertEqual(amenity.updated_at.isoformat(), '2022-01-02T12:34:56')
         self.assertEqual(amenity.name, 'Swimming Pool')
 
+
 if __name__ == '__main__':
     unittest.main()

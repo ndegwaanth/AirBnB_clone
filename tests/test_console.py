@@ -6,6 +6,7 @@ from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
 
+
 class TestHBNBCommand(unittest.TestCase):
     """this class is based on implementing the console.py"""
     def setUp(self):
@@ -39,7 +40,7 @@ class TestHBNBCommand(unittest.TestCase):
             with patch('builtins.input', return_value='all BaseModel'):
                 self.hbnb_command.onecmd('all BaseModel')
                 self.assertTrue(mock_stdout.getvalue().strip())
-    
+
     def test_quit_command(self):
         """test the implementation of the command quit"""
         with patch('sys.stdout', new_callable=StringIO) as mock_stdout:

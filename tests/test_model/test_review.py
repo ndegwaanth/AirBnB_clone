@@ -4,6 +4,7 @@
 import unittest
 from models.review import Review
 
+
 class TestReview(unittest.TestCase):
     """this class implement the unittest of the review.py"""
     def test_instance_creation(self):
@@ -57,6 +58,7 @@ class TestReview(unittest.TestCase):
         self.assertEqual(review.place_id, '456')
         self.assertEqual(review.user_id, '789')
         self.assertEqual(review.text, 'Great experience!')
+
 
 if __name__ == '__main__':
     unittest.main()

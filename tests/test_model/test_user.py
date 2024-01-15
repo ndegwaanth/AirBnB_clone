@@ -5,6 +5,7 @@
 import unittest
 from models.user import User
 
+
 class TestUser(unittest.TestCase):
     """ this class implement all the test cases of the user.py """
     def test_instance_creation(self):
@@ -71,6 +72,7 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(user_str, str)
         self.assertIn("[User] ({})".format(user.id), user_str)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,6 +4,7 @@
 import unittest
 from models.city import City
 
+
 class TestCity(unittest.TestCase):
     """this is the class that implement the the unittest of the city.py"""
     def test_instance_creation(self):
@@ -52,6 +53,7 @@ class TestCity(unittest.TestCase):
         self.assertEqual(city.updated_at.isoformat(), '2022-01-02T12:34:56')
         self.assertEqual(city.state_id, '456')
         self.assertEqual(city.name, 'New York')
+
 
 if __name__ == '__main__':
     unittest.main()

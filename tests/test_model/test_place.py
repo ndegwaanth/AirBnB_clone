@@ -4,6 +4,7 @@
 import unittest
 from models.place import Place
 
+
 class TestPlace(unittest.TestCase):
     """this id the class based on testing the place.py"""
     def test_instance_creation(self):
@@ -111,6 +112,7 @@ class TestPlace(unittest.TestCase):
         self.assertIsNotNone(place2.created_at)
         self.assertIsNotNone(place1.updated_at)
         self.assertIsNotNone(place2.updated_at)
+
     def test_from_dict(self):
         """ Test if an instance of Place can be created from a dictionary """
         place_data = {
@@ -146,6 +148,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(place.latitude, 40.7128)
         self.assertEqual(place.longitude, -74.0060)
         self.assertEqual(place.amenity_ids, ['789', '101'])
+
 
 if __name__ == '__main__':
     unittest.main()
