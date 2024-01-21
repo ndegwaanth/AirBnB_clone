@@ -3,8 +3,7 @@ header{
     height: 70px;
     width: 100%;
     border-bottom: 1px #CCCCCC;
-    display: flex;
-    align-items: center;
-    top: 0;
-    background-image: url('../images/logo.png');
+}
+header img{
+    padding-left: 20px;
 }
